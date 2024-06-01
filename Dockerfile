@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y openssh-server ca-certificates curl gnu
 
 # Installer Docker et Docker Compose
 RUN apt-get update && apt-get install -y apt-transport-https software-properties-common
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose
 
@@ -31,6 +31,9 @@ EXPOSE 22
 
 # Exposer d'autres ports
 EXPOSE 8080 9000 50000 5432 5000
+
+# Ajouter l'utilisateur au groupe Docker
+RUN usermod -aG docker test
 
 # Démarrer supervisord pour gérer les services
 CMD ["/usr/bin/supervisord"]
